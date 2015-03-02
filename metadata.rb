@@ -6,7 +6,7 @@ description      'Installs/Configures zfs on linux'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 source_url       'https://github.com/biola/chef-zfs_linux'
 issues_url       'https://github.com/biola/chef-zfs_linux/issues'
-version          '2.0.1'
+version          '2.1.0'
 supports         'ubuntu'
 
 depends          'apt'
