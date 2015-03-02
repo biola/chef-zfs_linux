@@ -1,0 +1,7 @@
+#Use this to add a group and more permissive permissions for zfs
+#so that you don't always need run it as root.  beware, users not root
+#can do nearly EVERYTHING, including, but not limited to destroying
+#volumes and deleting datasets.  they CANNOT mount datasets or create new
+#volumes, export datasets via NFS, or other things that require root
+#permissions outside of ZFS.
+ACTION=="add", KERNEL=="zfs", MODE="<%= @mode %>", GROUP="<%= @group %>"

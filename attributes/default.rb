@@ -3,6 +3,9 @@ default['zol']['spl_repo']                                         = "https://gi
 default['zol']['zfs_commit']                                       = "07dabd234dd51a1e5adc5bd21cddf5b5fdc70732"
 default['zol']['spl_commit']                                       = "31cb5383bff0fddc5058973e32a6f2c446d45e59"
 
+default['zol']['dev_group']                                        = "root"
+default['zol']['dev_perms']                                        = "600"
+
 case node['platform_version']
 when '12.04'
   default['zol']['mountall_url']                                   = "http://ppa.launchpad.net/zfs-native/daily/ubuntu/pool/main/m/mountall/mountall_2.36.4-zfs2_amd64.deb"
