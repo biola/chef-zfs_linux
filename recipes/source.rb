@@ -3,13 +3,13 @@
 # Recipe:: source
 #
 # Copyright 2015 Biola University
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,7 +21,8 @@ include_recipe 'zfs_linux::hold_kernel'
 include_recipe 'zfs_linux::build_tools'
 
 # Perform the installation
-if (node['platform_family'] == 'debian') and (node['platform_version'].to_f >= 12.04)
+if (node['platform_family'] == 'debian') &&
+   (node['platform_version'].to_f >= 12.04)
   # Ensure udev rule is in place
   # https://github.com/zfsonlinux/zfs/issues/362
   group node['zol']['dev_group'] do
@@ -31,7 +32,8 @@ if (node['platform_family'] == 'debian') and (node['platform_version'].to_f >= 1
     source '91-zfs-permissions.rules.erb'
     owner 'root'
     group 'root'
-    variables :mode => node['zol']['dev_perms'], :group => node['zol']['dev_group']
+    variables mode: node['zol']['dev_perms'],
+              group: node['zol']['dev_group']
   end
 
   # This will start the chain of download/compilation
@@ -116,13 +118,15 @@ if (node['platform_family'] == 'debian') and (node['platform_version'].to_f >= 1
   # Custom mountall package needed to auto-mount zfs volumes
   # at boot
   remote_file 'mountall' do
-    path "#{Chef::Config[:file_cache_path]}/#{node['zol']['mountall_url'].split('/').last}"
+    path "#{Chef::Config[:file_cache_path]}/" +
+      node['zol']['mountall_url'].split('/').last
     source node['zol']['mountall_url']
     checksum node['zol']['mountall_checksum']
   end
 
   package 'mountall' do
-    source "#{Chef::Config[:file_cache_path]}/#{node['zol']['mountall_url'].split('/').last}"
+    source "#{Chef::Config[:file_cache_path]}/" +
+      node['zol']['mountall_url'].split('/').last
     provider Chef::Provider::Package::Dpkg
     not_if 'dpkg --get-selections | grep \'^mountall\' | grep -q \'hold\''
   end

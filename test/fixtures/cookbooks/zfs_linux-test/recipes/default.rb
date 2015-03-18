@@ -3,13 +3,13 @@
 # Recipe:: default
 #
 # Copyright 2015 Biola University
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,7 +19,7 @@
 # Setup our ZFS filesystem
 execute 'create_zfs_sparse_file' do
   command "truncate -s 1G #{Chef::Config[:file_cache_path]}/zfsdisk.img"
-  not_if { File.exists?("#{Chef::Config[:file_cache_path]}/zfsdisk.img") }
+  not_if { File.exist?("#{Chef::Config[:file_cache_path]}/zfsdisk.img") }
   action :nothing
   subscribes :run, 'execute[load_zfs_module]'
   notifies :run, 'execute[create_zfs_loopback_device]', :immediately
@@ -42,13 +42,15 @@ end
 
 # Create a few snapshots on the filesystem
 (1..6).each do |num|
-  zfs_linux_snapshot "zfs-chef-snap-test#{num.to_s}" do
+  zfs_linux_snapshot "zfs-chef-snap-test#{num}" do
     dataset 'tank/test'
     action :nothing
-    prefix "zfs-chef-snap-test#{num.to_s}"
+    prefix "zfs-chef-snap-test#{num}"
     # Prune out 3 of the snapshots just created
-    unless num == 6
-      notifies :create, "zfs_linux_snapshot[zfs-chef-snap-test#{(num + 1).to_s}]", :immediately
+    if num != 6
+      notifies :create,
+               "zfs_linux_snapshot[zfs-chef-snap-test#{(num + 1)}]",
+               :immediately
     else
       notifies :prune, 'zfs_linux_snapshot[test_prune]', :immediately
     end
