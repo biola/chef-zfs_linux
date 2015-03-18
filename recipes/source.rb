@@ -105,7 +105,7 @@ if (node['platform_family'] == 'debian') &&
 
   execute 'install_zfs' do
     command 'dpkg -i spl/*.deb zfs/*.deb'
-    cwd "#{Chef::Config[:file_cache_path]}"
+    cwd Chef::Config[:file_cache_path]
     action :nothing
     notifies :run, 'execute[load_zfs_module]'
   end
