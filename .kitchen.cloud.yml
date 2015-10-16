@@ -1,0 +1,15 @@
+---
+driver:
+  name: digitalocean
+
+provisioner:
+  name: chef_zero
+
+platforms:<% %w{ubuntu-12-04-x64 ubuntu-14-04-x64}.each do |p| %> 
+  - name: <%= p %>
+    driver_config:
+      size: 1gb
+      region: sfo1
+      private_networking: false
+    run_list:
+    - recipe[apt]<% end %>
