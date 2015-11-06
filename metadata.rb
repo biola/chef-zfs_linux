@@ -12,5 +12,4 @@ supports         'centos'
 
 depends          'apt'
 depends          'cron'
-depends			 'yum-centos'
-depends			 'yum-epel'
+depends          'yum-epel'
