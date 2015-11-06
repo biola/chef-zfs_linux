@@ -41,12 +41,6 @@ when 'ubuntu'
     action :install
   end
 
-  # Load module after udev rule is in place
-  execute 'load_zfs_module' do
-    command 'modprobe zfs'
-    action :nothing
-  end
-
   group node['zol']['dev_group'] do
     system true
   end
@@ -59,4 +53,37 @@ when 'ubuntu'
               group: node['zol']['dev_group']
     notifies :run, 'execute[load_zfs_module]', :immediately
   end
+when 'centos'
+  include_recipe 'yum-epel'
+  
+  package "zfs-release" do
+    source "http://archive.zfsonlinux.org/epel/zfs-release.el7.noarch.rpm"
+    action :install
+    provider Chef::Provider::Package::Rpm
+  end
+
+  package ['zfs']
+
+  kver = node['kernel']['release']
+  kver.slice! '.' + node['kernel']['machine']
+
+  package 'kernel-devel' do
+    version kver
+    action :install
+	notifies :run, 'execute[dkms_update]', :immediately
+  end
+
+  execute 'dkms_update' do
+	command 'dkms autoinstall'
+	action :nothing
+    notifies :run, 'execute[load_zfs_module]', :immediately
+  end
+
 end
+
+# Load module after udev rule is in place
+execute 'load_zfs_module' do
+  command 'modprobe zfs'
+  action :nothing
+end
+
