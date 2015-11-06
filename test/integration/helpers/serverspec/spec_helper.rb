@@ -6,7 +6,7 @@ set :backend, :exec
 set :path, '/sbin:/usr/sbin:$PATH'
 
 # Have the modules been loaded?
-['zfs','spl'].each do |mod|
+%w(zfs spl).each do |mod|
   describe kernel_module(mod) do
     it { should be_loaded }
   end
