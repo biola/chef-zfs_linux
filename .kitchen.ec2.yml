@@ -1,0 +1,38 @@
+---
+driver:
+  name: ec2
+<%= "  security_group_ids: #{ENV['TESTKITCHEN_EC2_SEC_GROUP_IDS']}" if ENV['TESTKITCHEN_EC2_SEC_GROUP_IDS'] %>
+<%= "  subnet_id: #{ENV['TESTKITCHEN_EC2_SUBNET_ID']}" if ENV['TESTKITCHEN_EC2_SUBNET_ID'] %>
+
+provisioner:
+  name: chef_zero
+
+transport:
+  name: rsync
+
+platforms:
+  - name: centos-7
+    run_list:
+    - recipe[yum-centos]
+  - name: ubuntu-12.04
+    run_list:
+    - recipe[apt]
+  - name: ubuntu-14.04
+    run_list:
+    - recipe[apt]
+
+suites:
+  - name: default
+    run_list:
+      - recipe[zfs_linux::default]
+      - recipe[zfs_linux-test::default]
+    attributes:
+      dev_mode: true
+  - name: source
+    excludes:
+      - centos-7
+    run_list:
+      - recipe[zfs_linux::source]
+      - recipe[zfs_linux-test::default]
+    attributes:
+      dev_mode: true
