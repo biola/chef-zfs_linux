@@ -14,3 +14,5 @@ when '14.04'
   default['zol']['mountall_url'] = 'http://ppa.launchpad.net/zfs-native/daily/ubuntu/pool/main/m/mountall/mountall_2.53-zfs1_amd64.deb'
   default['zol']['mountall_checksum'] = '87f33148dd06f861f757f472464a60015bac3595ad73e4deac7a1968adec356d'
 end
+
+default['zol']['zfs-release'] = 'http://download.zfsonlinux.org/epel/zfs-release.el7.noarch.rpm'

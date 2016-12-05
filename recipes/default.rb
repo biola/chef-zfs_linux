@@ -57,7 +57,7 @@ when 'centos'
   include_recipe 'yum-epel'
   
   package 'zfs-release' do
-    source 'http://archive.zfsonlinux.org/epel/zfs-release.el7.noarch.rpm'
+    source node['zol']['zfs-release']
     action :install
     provider Chef::Provider::Package::Rpm
   end
